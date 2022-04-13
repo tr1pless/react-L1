@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.css';
-import { Main } from './components/Main'
+import { Form } from './components/FormFunc/Form';
 
 export const App = () => {
-  return <>
-    <Main />
-  </>
-}
-
-export default App;
+  return (
+    <>
+      <Form />
+    </>
+  );
+};
