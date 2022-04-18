@@ -51,12 +51,12 @@ describe('button', () => {
         // expect(mockHandler).toBeCalledTime(0)
     // })
 
-    it('button async click', async () => {
-        const mockHandler = jest.fn()
-        render(<Button onButtonClick={() => setTimeout(mockHandler, 500)}/>)
+    // it('button async click', async () => {
+        // const mockHandler = jest.fn()
+        // render(<Button onButtonClick={() => setTimeout(mockHandler, 500)}/>)
 
-        userEvent.click(screen.getByText('click'))
+        // userEvent.click(screen.getByText('click'))
 
-        await waitFor(() => expect(mockHandler).toHaveBeenCalledTime(1))
-    })
+        // await waitFor(() => expect(mockHandler).toHaveBeenCalledTime(1))
+    // })
 })
