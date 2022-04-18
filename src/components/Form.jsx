@@ -18,8 +18,7 @@ export const Form = ({addMessage}) => {
       <p>Введите Имя</p>
       <input type="text" onChange={e => setName(e.target.value)} value={name} />
       <p>Введите ваше сообщение</p>
-      <input 
-      type="text" 
+      <textarea  
       value={value} 
       onChange={e => setValue(e.target.value)}/>
       <Button onButtonClick={() => {}}/>
