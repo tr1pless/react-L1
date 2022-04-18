@@ -6,6 +6,7 @@ import { AUTHOR } from './constants';
 
 export const App = () => {
   const [messages, setMessages] = useState([])
+  
 
   useEffect(() => {
     if(messages.length > 0 &&
@@ -23,13 +24,16 @@ export const App = () => {
     }
   }, [messages]);
 
-const addMessage = (value) => {
+
+const addMessage = (value,name) => {
   setMessages([
     ...messages, 
     {
-    author: AUTHOR.USER,
+    author: name,
     value,
   }])
+  console.log(name)
+  console.log(messages)
 }
 
   return (
