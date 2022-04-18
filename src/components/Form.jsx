@@ -1,19 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { Button } from './Button/Button';
+
 
 export const Form = ({addMessage}) => {
   const [value, setValue] = useState('')
-  
-  
+  const [name, setName] = useState('')
+
   const handleSubmitForm = (e) => {
     e.preventDefault();
     setValue('')
-    addMessage(value);
+    addMessage(value,name);
+    console.log(name)
   }
 
   return (
     <form onSubmit={handleSubmitForm}>
-      
+      <p>Введите Имя</p>
+      <input type="text" onChange={e => setName(e.target.value)} value={name} />
+      <p>Введите ваше сообщение</p>
       <input 
       type="text" 
       value={value} 
