@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`button render with snapshot 1`] = `
+exports[`Button render with snapshot 1`] = `
 <DocumentFragment>
   <button
-    style="background-color: red;"
+    class="button"
     type="submit"
   >
     click
