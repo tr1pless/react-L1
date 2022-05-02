@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`render with snapshot need to render form with snapshot 1`] = `
+<DocumentFragment>
+  <form>
+    <p>
+      Введите Имя
+    </p>
+    <input
+      type="text"
+      value=""
+    />
+    <p>
+      Введите ваше сообщение
+    </p>
+    <textarea />
+    <button
+      style="background-color: red;"
+      type="submit"
+    >
+      click
+    </button>
+  </form>
+</DocumentFragment>
+`;
