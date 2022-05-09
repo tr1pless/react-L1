@@ -2,13 +2,16 @@ import React, { FC, useState, useMemo } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import './App.scss';
+import { defaultContext, ThemeContext } from './utils/ThemeContext'
 import { Header } from './components/Header';
-import { Chats } from './pages/Chats';
+import { Chats } from './pages/Chats/Chats';
 import { Home } from './pages/Home';
 import { Profile } from './pages/Profile';
 import { ChatList } from './components/ChatList';
 import { AUTHOR } from './constants';
 import { nanoid } from 'nanoid';
+import {Provider} from 'react-redux'
+import { store } from './store';
 
 export interface Chat {
   id: string;
@@ -37,7 +40,7 @@ export interface Messages {
 
 export const App: FC = () => {
   const [messages, setMessages] = useState<Messages>(initialMessage);
-  
+  const [theme, setTheme] = useState(defaultContext.theme)
   const chatList = useMemo(
     () =>
       Object.entries(messages).map((chat) => ({
@@ -65,7 +68,19 @@ export const App: FC = () => {
       })
     }
 
+    const toggleTheme = () => {
+      setTheme(theme === 'light' ? 'dark': 'light')
+    }
+
   return (
+    <Provider store={store}>
+    <ThemeContext.Provider 
+    value={
+      {
+        theme,
+        toggleTheme,
+      }
+    }>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Header />}>
@@ -95,5 +110,7 @@ export const App: FC = () => {
         <Route path="*" element={<h2>404</h2>} />
       </Routes>
     </BrowserRouter>
+    </ThemeContext.Provider>
+    </Provider>
   );
 };

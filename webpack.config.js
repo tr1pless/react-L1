@@ -8,7 +8,11 @@ module.exports = {
         path: path.resolve(__dirname, './build')
     },
     resolve: {
-        extensions: ['.js', '.jsx', '.tsx', '.ts']
+        extensions: ['.js', '.jsx', '.tsx', '.ts'],
+        alias: {
+            components: path.resolve(__dirname, 'src/components/'),
+            src: path.resolve(__dirname, 'src'),
+        },
     },
     devServer: {
         compress: true,
