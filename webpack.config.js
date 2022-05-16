@@ -4,8 +4,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 module.exports = {
     entry: path.resolve(__dirname, './src/index.tsx'),
     output: {
-        filename: 'bandle.js',
-        path: path.resolve(__dirname, './build')
+        filename: '[name].bandle.[chunkhash].js',
+        clean: true,
+        path: path.resolve(__dirname, './build'),
+        environment: {
+            arrowFunction: false,
+        }    
     },
     resolve: {
         extensions: ['.js', '.jsx', '.tsx', '.ts'],

@@ -101,5 +101,5 @@
   "include": [
     "src/**/*",
     "test.config.js"
-  ]
+  ],
 }

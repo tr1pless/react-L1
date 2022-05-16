@@ -1,116 +1,52 @@
-import React, { FC, useState, useMemo } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import React, { FC, useState, useMemo, Suspense } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { defaultContext, ThemeContext } from "./utils/ThemeContext";
+import { Header } from "./components/Header";
+import { Home } from "./pages/Home";
+import { Profile } from "./pages/Profile";
+import { ChatList } from "./components/ChatList";
+import { useSelector } from "react-redux";
+import { selectChats } from "./store/chats/selectors";
+import "./App.scss";
+import { AboutWithConnect } from "./pages/About";
 
-import './App.scss';
-import { defaultContext, ThemeContext } from './utils/ThemeContext'
-import { Header } from './components/Header';
-import { Chats } from './pages/Chats/Chats';
-import { Home } from './pages/Home';
-import { Profile } from './pages/Profile';
-import { ChatList } from './components/ChatList';
-import { AUTHOR } from './constants';
-import { nanoid } from 'nanoid';
-import {Provider} from 'react-redux'
-import { store } from './store';
-
-export interface Chat {
-  id: string;
-  name: string;
-}
-
-const initialMessage: Messages = {
-  default: [
-    {
-      id: '1',
-      author: AUTHOR.USER,
-      value: 'Hello geekbrains',
-    },
-  ],
-};
-
-export interface Message {
-  id: string;
-  author: string;
-  value: string;
-}
-
-export interface Messages {
-  [key: string]: Message[];
-}
+const Chats = React.lazy(() =>
+  import("./pages/Chats/Chats").then((module) => ({
+    default: module.Chats,
+  }))
+);
 
 export const App: FC = () => {
-  const [messages, setMessages] = useState<Messages>(initialMessage);
-  const [theme, setTheme] = useState(defaultContext.theme)
-  const chatList = useMemo(
-    () =>
-      Object.entries(messages).map((chat) => ({
-        id: nanoid(),
-        name: chat[0],
-      })),
-    [Object.entries(messages).length]
-  );
+  const [theme, setTheme] = useState(defaultContext.theme);
+  const chats = useSelector(selectChats);
 
-  
-  const onAddChat = (chat: Chat) => {
-    if(!messages[chat.name]) {
-      setMessages({
-        ...messages,
-        [chat.name]: [],
-      });
-    }
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
   };
-    const onDeleteChat = (chatName: string) => {
-      const newMessages = {...messages};
-      delete newMessages[chatName];
-
-      setMessages({
-        ...newMessages
-      })
-    }
-
-    const toggleTheme = () => {
-      setTheme(theme === 'light' ? 'dark': 'light')
-    }
 
   return (
-    <Provider store={store}>
-    <ThemeContext.Provider 
-    value={
-      {
+    <ThemeContext.Provider
+      value={{
         theme,
         toggleTheme,
-      }
-    }>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Header />}>
-          <Route index element={<Home />} />
-          <Route path="profile" element={<Profile />} />
-
-          <Route path="chats">
-            <Route
-              index
-              element={<ChatList chatList={chatList} onAddChat={onAddChat} onDeleteChat={onDeleteChat}/>}
-            />
-            <Route
-              path=":chatId"
-              element={
-                <Chats
-                  messages={messages}
-                  setMessages={setMessages}
-                  chatList={chatList}
-                  onAddChat={onAddChat}
-                  onDeleteChat={onDeleteChat}
-                />
-              }
-            />
-          </Route>
-        </Route>
-
-        <Route path="*" element={<h2>404</h2>} />
-      </Routes>
-    </BrowserRouter>
+      }}
+    >
+      <BrowserRouter>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Routes>
+            <Route path="/" element={<Header />}>
+              <Route index element={<Home />} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="chats">
+                <Route index element={<ChatList />} />
+                <Route path=":chatId" element={<Chats />} />
+              </Route>
+              <Route path="about" element={<AboutWithConnect />} />
+            </Route>
+            <Route path="*" element={<h2>404</h2>} />
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
     </ThemeContext.Provider>
-    </Provider>
   );
 };
