@@ -1,11 +1,19 @@
-import { createStore, compose, combineReducers, applyMiddleware } from "redux";
-import thunk from "redux-thunk";
-import { persistStore, persistReducer } from "redux-persist";
+import { compose, combineReducers } from "redux";
+import {
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+  persistStore,
+  persistReducer,
+} from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
-import { chatReducer, ChatsState } from "./chats/reducer";
+import { chatsReducer, ChatsState } from "./chats/slice";
 import { ProfileState } from "./profile/slice";
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { profileReducer } from "./profile/slice";
 
 export const composeEnhancers =
@@ -19,24 +27,25 @@ export interface StoreState {
 const persistConfig = {
   key: "root",
   storage,
-  blacklist: ["profile"],
+  blacklist: [],
 };
 
 const rootReducer = combineReducers<StoreState>({
   profile: profileReducer,
-  chats: chatReducer,
+  chats: chatsReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-// export const store = createStore(
-// persistedReducer,
-// composeEnhancers(applyMiddleware(thunk))
-// );
-
 export const store = configureStore({
-  reducer: persistedReducer,
   devTools: process.env.NODE_ENV !== "production",
+  middleware: (getDefaultMiddleWare) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+  reducer: persistedReducer,
 });
 
 export const persistor = persistStore(store);
