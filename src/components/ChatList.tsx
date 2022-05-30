@@ -2,7 +2,7 @@ import React, { FC, useState } from "react";
 import { Link } from "react-router-dom";
 import { ListItem } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { addChat, deleteChat } from "../store/chats/actions";
+import { addChat, deleteChat } from "../store/chats/slice";
 import { selectChatList } from "../store/chats/selectors";
 
 export const ChatList: FC = () => {
@@ -18,7 +18,7 @@ export const ChatList: FC = () => {
     e.preventDefault();
 
     if (name) {
-      dispatch(addChat(name));
+      dispatch(addChat({ name }));
       setName("");
     }
   };
@@ -29,7 +29,9 @@ export const ChatList: FC = () => {
         {chatList.map((chat) => (
           <ListItem key={chat.id}>
             <Link to={`/chats/${chat.name}`}>{chat.name}</Link>
-            <button onClick={() => dispatch(deleteChat(chat.name))}>x</button>
+            <button onClick={() => dispatch(deleteChat({ chatId: chat.name }))}>
+              x
+            </button>
           </ListItem>
         ))}
       </ul>
