@@ -15,32 +15,6 @@ export const Chats: FC = () => {
   const chats = useSelector(selectChats, shallowEqual);
   const chatList = useSelector(selectChatList, shallowEqual);
 
-  // useEffect(() => {
-  // if (
-  // chatId &&
-  // chats[chatId]?.length > 0 &&
-  // chats[chatId][chats[chatId].length - 1].author !== AUTHOR.BOT
-  // ) {
-  // const timeout = setTimeout(() => {
-  // setMessages({
-  // ...messages,
-  // [chatId]: [
-  // ...messages[chatId],
-  // {
-  // id: nanoid(),
-  // author: AUTHOR.BOT,
-  // value: "Im BOT",
-  // },
-  // ],
-  // });
-  // }, 1000);
-
-  // return () => {
-  // clearTimeout(timeout);
-  // };
-  // }
-  // }, [chatId, messages, setMessages]);
-
   if (!chatList.find((chat) => chat.name === chatId)) {
     return <Navigate replace to="/chats" />;
   }
@@ -48,7 +22,6 @@ export const Chats: FC = () => {
   return (
     <>
       <ChatList />
-      {/* <MessageList messages={chatId ? messages[chatId] : []} /> */}
       <MessageListWithClass
         messages={chatId ? chats[chatId] : []}
         classes={style.border}
